@@ -19,7 +19,7 @@ function JokeContent() {
     localStorage.setItem("currentJokeIndex", currentJokeIndex);
 
     // Check all jokes have been shown
-    if (currentJokeIndex === joke.length - 1) {
+    if (joke.length > 0 && currentJokeIndex === joke.length) {
       setShowAllJoke(true);
       localStorage.setItem("showAllJoke", "true");
     }
@@ -41,8 +41,12 @@ function JokeContent() {
   };
 
   const showAnotherJoke = () => {
-    if (currentJokeIndex < joke.length - 1) {
+    const nextJokeIndex = currentJokeIndex + 1;
+    if (nextJokeIndex < joke.length) {
       setCurrentJokeIndex(currentJokeIndex + 1);
+    } else {
+      setShowAllJoke(true);
+      localStorage.setItem("showAllJoke", "true");
     }
   };
 
