@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# DEPLOY LINK
 
-This project was deployed with [LINK](https://github.com/facebook/create-react-app).
+This project was deployed with [LINK](https://jokee-web.vercel.app/).
 
 ## Available Scripts
 
