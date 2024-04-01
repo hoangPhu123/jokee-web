@@ -3,12 +3,27 @@ import data from "./../../data.json";
 
 function JokeContent() {
   const [joke, setJoke] = useState([]);
-  const [currentJokeIndex, setCurrentJokeIndex] = useState(0);
-  const [showAllJoke, setShowAllJoke] = useState(true);
+
+  const [currentJokeIndex, setCurrentJokeIndex] = useState(() => {
+    const savedIndex = localStorage.getItem("currentJokeIndex");
+    return savedIndex !== null ? parseInt(savedIndex, 10) : 0;
+  });
+
+  const [showAllJoke, setShowAllJoke] = useState(() => {
+    const show = localStorage.getItem("showAllJoke");
+    return show === "true";
+  });
 
   useEffect(() => {
     setJoke(data);
-  }, []);
+    localStorage.setItem("currentJokeIndex", currentJokeIndex);
+
+    // Check all jokes have been shown
+    if (currentJokeIndex === joke.length - 1) {
+      setShowAllJoke(true);
+      localStorage.setItem("showAllJoke", "true");
+    }
+  }, [currentJokeIndex, joke]);
 
   const recordVote = (type) => {
     const updatedJokes = [...joke];
@@ -28,14 +43,18 @@ function JokeContent() {
   const showAnotherJoke = () => {
     if (currentJokeIndex < joke.length - 1) {
       setCurrentJokeIndex(currentJokeIndex + 1);
-    } else {
-      setShowAllJoke(false);
     }
   };
 
   return (
     <div className="text-center lg:py-24 sm:py-14 max-sm:py-9">
       {showAllJoke ? (
+        <div>
+          <h1 className=" text-gray-600 font-normal lg:text-2xl lg:px-[25rem] py-11 md:px-[10rem] sm:px-[4rem] max-sm:px-[4rem] max-sm:text-[10px]">
+            That's all the jokes for today! Come back another day!
+          </h1>
+        </div>
+      ) : (
         <div>
           <h1 className="text-left text-gray-600 font-normal lg:text-[17.5px] lg:px-[25rem] py-11 md:px-[10rem] sm:px-[4rem] max-sm:px-[4rem] max-sm:text-[8px]">
             {joke[currentJokeIndex]?.paragraph}
@@ -61,12 +80,6 @@ function JokeContent() {
               This is not funny.
             </button>
           </div>
-        </div>
-      ) : (
-        <div>
-          <h1 className=" text-gray-600 font-normal lg:text-2xl lg:px-[25rem] py-11 md:px-[10rem] sm:px-[4rem] max-sm:px-[4rem] max-sm:text-[10px]">
-            That's all the jokes for today! Come back another day!
-          </h1>
         </div>
       )}
     </div>
